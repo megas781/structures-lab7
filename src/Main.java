@@ -4,20 +4,45 @@ public class Main {
 
         Tree myTree = new Tree();
 
-        myTree.insert(5, "Gleb");
-        myTree.insert(7, "Alexey");
-        myTree.insert(3, "Katya");
-        myTree.insert(4, "Zhenya");
-        myTree.insert(5, "Pasha");
+//        myTree.insert(5, "Gleb");
+//        myTree.insert(7, "Pasha");
+//        myTree.insert(3, "Katya");
+//        myTree.insert(4, "Zhenya");
+//        myTree.insert(6, "Alexey");
+//        myTree.insert(45, "Masha");
+//        myTree.insert(41, "Dasha");
+//        myTree.insert(40, "Dasha");
+//        myTree.insert(48, "Dasha");
 
-//        for (int i = 0; i < 10; i++) {
-//            myTree.insert((int) Math.round(Math.random() * 90 + 10), "Zhopa" + (i + 1));
-//        }
 
-        myTree.displayTree();
-        myTree.delete(5);
+//        myTree.insert(-2, "");
+//        myTree.insert(3, "");
+//        myTree.insert(2, "");
+//        myTree.insert(-5, "");
+//        myTree.insert(9, "");
+//        myTree.insert(7, "");
+//        myTree.insert(10, "");
+//        myTree.insert(8, "");
+//        myTree.insert(6, "");
+
+
+
+        myTree.insert(3, "");
+        myTree.insert(1, "");
+        myTree.insert(1, "");
+        myTree.insert(9, "");
+        myTree.insert(7, "");
+        myTree.insert(10, "");
+        myTree.insert(8, "");
+        myTree.insert(6, "");
+
+        myTree.displayTreeDeeply();
+
+        myTree.deleteSafely(3);
+
         System.out.println("after:");
-        myTree.displayTree();
+
+        myTree.displayTreeDeeply();
 
     }
 }

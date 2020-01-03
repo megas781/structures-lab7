@@ -1,6 +1,9 @@
+import java.util.LinkedList;
+
 public class Tree {
     private TreeNode root;
 
+    //Поиск элемента
     public TreeNode find(int searchedID) {
         TreeNode current = root;
         while (current.id != searchedID) {
@@ -19,6 +22,7 @@ public class Tree {
         return current;
     }
 
+    //Добавление
     public void insert(int id, String data) {
         TreeNode newNode = new TreeNode();
         newNode.id = id;
@@ -58,18 +62,150 @@ public class Tree {
         }
     }
 
-    public void delete(int deleteId) {
+    //Умное удаление
+    public void deleteSafely(int deleteId) {
+        //Parent нужен, потому что только родитель может удалить потомка
+        TreeNode parent = root;
+        TreeNode current = root;
+        Boolean isLeft = false;
+//        Счетчик, определяющий root
+        int k = 0;
+
+        //Алгоритм похож на поиск
+        while (current.id != deleteId) {
+
+            k++;
+
+            if (current.id < deleteId) {
+                //Нужно двигаться вправо
+
+                if (current.hasRightChild()) {
+                    parent = current;
+                    current = current.rightChild;
+                    isLeft = false;
+                } else {
+                    System.out.println("[Не нашёл, что удалять]");
+                    return; //не нашли
+                }
+
+            } else {
+                if (current.hasLeftChild()) {
+                    //Нужно двигаться влево
+                    parent = current;
+                    current = current.leftChild;
+                    isLeft = true;
+                } else {
+                    System.out.println("[Не нашёл, что удалять]");
+                    return; //не нашли
+                }
+
+            }
+        }
+
+        //Если удалось выйти из цикла, то узел найден. Удаляем!
+
+        //сохраняем тот узел, который собираемся удалять
+        TreeNode delNode = current;
+
+        if (!delNode.hasChildren()) {//Если нет потомков
+            if (k == 0) {
+                //Типа удаление
+                this.root = null;
+            } else {
+                if (isLeft) {
+                    //Типа удаление
+                    parent.leftChild = null;
+                } else {
+                    //Типа удаление
+                    parent.rightChild = null;
+                }
+            }
+        } else if (delNode.hasLeftChild() && !delNode.hasRightChild()) {
+
+            if (isLeft) {
+                //Типа удаление
+                parent.leftChild = delNode.leftChild;
+            } else {
+                //Типа удаление
+                parent.rightChild = delNode.leftChild;
+            }
+
+        } else if (!delNode.hasLeftChild() && delNode.hasRightChild()) {
+            if (isLeft) {
+                //Типа удаление
+                parent.leftChild = delNode.rightChild;
+            } else {
+                //Типа удаление
+                parent.rightChild = delNode.rightChild;
+            }
+        } else {
+            //Здесь нужно выбирать
+
+            //Шагаем один раз вправо (Теперь current используется для поиска приемника)
+            current = current.rightChild;
+
+            /* на этом месте если у очередного current нет левого потомка,
+                то parent.rightChild = current и всё */
+            if (!current.hasLeftChild()) {
+                current.leftChild = delNode.leftChild; //наличие гарантировано
+                current.rightChild = delNode.rightChild; //наличие гарантировано
+
+                if (k == 0) {
+                    this.root = current;
+                } else {
+                    //Типа удаление
+                    if (isLeft) {
+                        parent.leftChild = current;
+                    } else {
+                        parent.rightChild = current;
+                    }
+                }
+                return;
+            }
+
+
+            TreeNode previous = null; //previous это типа родитель, но у которого скоро заберут ребёнка
+
+            //Далее налево, пока не упрёмся
+            while (current.hasLeftChild()) {
+                previous = current;
+                current = current.leftChild;
+            }
+
+
+            current.leftChild = delNode.leftChild; //наличие гарантировано
+            current.rightChild = delNode.rightChild; //наличие гарантировано
+            previous.leftChild = null;
+
+            if (k == 0) {
+                this.root = current;
+            } else {
+                //Типа удаление
+                if (isLeft) {
+                    parent.leftChild = current;
+                } else {
+                    parent.rightChild = current;
+                }
+            }
+
+        }
+
+
+    }
+
+    //Удаление c потомками
+    public void deleteWithChildren(int deleteId) {
+        //Parent нужен, потому что только родитель может удалить потомка
         TreeNode parent = root;
         TreeNode current = root;
 
+//        Счетчик, определяющий root
         int k = 0;
 
+        //Алгоритм похож на поиск
         while (current.id != deleteId) {
 
-            System.out.println(++k);
-//            if (!current.hasChildren()) {
-//                return; // не нашли, что удалить((
-//            }
+            k++;
 
             if (current.id < deleteId) {
                 //Нужно двигаться вправо
@@ -78,6 +214,7 @@ public class Tree {
                     parent = current;
                     current = current.rightChild;
                 } else {
+                    System.out.println("[Не нашёл, что удалять]");
                     return; //не нашли
                 }
 
@@ -87,15 +224,20 @@ public class Tree {
                     parent = current;
                     current = current.leftChild;
                 } else {
+                    System.out.println("[Не нашёл, что удалять]");
                     return; //не нашли
                 }
 
             }
         }
 
-        if (deleteId == this.root.id) {
+        //Если удалось выйти из цикла, то узел найден. Удаляем!
+
+        //Проверка, не является ли узел корневым
+        if (k == 0) {
             this.root = null;
         } else {
+
             if (parent.leftChild == current) {
                 parent.leftChild = null;
             } else {
@@ -105,17 +247,18 @@ public class Tree {
     }
 
 
-    public void displayTree() {
+    //Обход дерева в глубину
+    public void displayTreeDeeply() {
         if (root == null) {
             System.out.println();
             System.out.println("[Empty Tree]");
             System.out.println();
             return;
         }
-        displayTree(root, 0);
+        _displayTree(root, 0);
     }
 
-    private void displayTree(TreeNode rootNode, int level) {
+    private void _displayTree(TreeNode rootNode, int level) {
         System.out.println("  " + rootNode.id);
 
         if (rootNode.hasLeftChild()) {
@@ -140,11 +283,45 @@ public class Tree {
         }
 
         if (rootNode.hasLeftChild() && rootNode.leftChild.hasChildren()) {
-            displayTree(rootNode.leftChild, level + 1);
+            _displayTree(rootNode.leftChild, level + 1);
         }
         if (rootNode.hasRightChild() && rootNode.rightChild.hasChildren()) {
-            displayTree(rootNode.rightChild, level + 1);
+            _displayTree(rootNode.rightChild, level + 1);
         }
     }
 
+    //Обход дерева в ширину
+    public void displayTreeWidely() {
+
+        int k = 0;
+
+        LinkedList<TreeNode> currentQueue = new LinkedList<>();
+        LinkedList<TreeNode> tempQueue = new LinkedList<>();
+
+        currentQueue.addLast(root);
+
+        while (!currentQueue.isEmpty()) {
+
+//            System.out.println("length: " + currentQueue.size());
+            //Принтим currentQueue, параллельно заполняя tempQueue
+            System.out.print((++k) + ")");
+            while (!currentQueue.isEmpty()) {
+                TreeNode node = currentQueue.pollFirst();
+                System.out.print(" " + node.id);
+
+                if (node.hasLeftChild()) {
+                    tempQueue.addLast(node.leftChild);
+                }
+                if (node.hasRightChild()) {
+                    tempQueue.addLast(node.rightChild);
+                }
+            }
+            while (!tempQueue.isEmpty()) {
+                currentQueue.addLast(tempQueue.pollFirst());
+            }
+            System.out.println();
+        }
+        ;
+
+    }
 }
