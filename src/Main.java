@@ -4,45 +4,32 @@ public class Main {
 
         Tree myTree = new Tree();
 
-//        myTree.insert(5, "Gleb");
-//        myTree.insert(7, "Pasha");
-//        myTree.insert(3, "Katya");
-//        myTree.insert(4, "Zhenya");
-//        myTree.insert(6, "Alexey");
-//        myTree.insert(45, "Masha");
-//        myTree.insert(41, "Dasha");
-//        myTree.insert(40, "Dasha");
-//        myTree.insert(48, "Dasha");
-
-
-//        myTree.insert(-2, "");
-//        myTree.insert(3, "");
-//        myTree.insert(2, "");
-//        myTree.insert(-5, "");
-//        myTree.insert(9, "");
-//        myTree.insert(7, "");
-//        myTree.insert(10, "");
-//        myTree.insert(8, "");
-//        myTree.insert(6, "");
 
 
 
-        myTree.insert(3, "");
-        myTree.insert(1, "");
-        myTree.insert(1, "");
-        myTree.insert(9, "");
-        myTree.insert(7, "");
-        myTree.insert(10, "");
-        myTree.insert(8, "");
-        myTree.insert(6, "");
+        myTree.insert(3, "Gleb");
+        myTree.insert(1, "Alexey");
+        myTree.insert(1, "Lida");
+        myTree.insert(9, "Masha");
+        myTree.insert(7, "Kolya");
+        myTree.insert(10, "Stas");
+        myTree.insert(8, "Zhora");
+        myTree.insert(6, "Marina");
 
+
+        System.out.println("Обход в глубину");
         myTree.displayTreeDeeply();
-
+        //Умное удаление
         myTree.deleteSafely(3);
-
-        System.out.println("after:");
-
+        System.out.println("После удаления:");
         myTree.displayTreeDeeply();
+        System.out.println();
+
+        System.out.println("Обход в ширину");
+        myTree.displayTreeWidely();
+
+        System.out.println("Поиск(10): " + myTree.find(10).name);
+
 
     }
 }

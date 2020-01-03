@@ -1,7 +1,7 @@
 public class TreeNode {
 
     public int id;
-    public String data;
+    public String name;
 
     public TreeNode leftChild = null;
     public TreeNode rightChild = null;

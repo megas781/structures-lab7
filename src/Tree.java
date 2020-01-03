@@ -26,7 +26,7 @@ public class Tree {
     public void insert(int id, String data) {
         TreeNode newNode = new TreeNode();
         newNode.id = id;
-        newNode.data = data;
+        newNode.name = data;
 
         //Если корневого узла не существует
         if (root == null) {
